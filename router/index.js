@@ -21,8 +21,15 @@ const router = (server, req, res) => {
 
   const routeTree = route.join(' > ');
 
+  // full route was found
   if ($(routeTree).length) {
     $(routeTree).trigger('route', [req, res]);
+  // possibly a dynamic route
+  } else if ($(route[route.length - 2]).length && $(route[route.length - 2]).data('dynamic')) {
+    $(route[route.length - 2])
+      .data($(route[route.length - 2]).data('dynamic'), route[route.length - 1]);
+    $(route[route.length - 2]).trigger('route', [req, res]);
+  // route not found and not a dynamic route
   } else {
     $('not-found').trigger('route', [req, res]);
   }

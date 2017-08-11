@@ -4,7 +4,8 @@ const { $, server, router } = yt;
 
 // add a test route on the root (e.g. localhost/test)
 $.route('index')
-  .append('<test>');
+  .append('<test>')
+  .append('<nested data-dynamic="name">');
 
 // add handler to index route
 $.route('index')
@@ -20,6 +21,13 @@ $.route('test')
     $('body').html('<div>Hello world!</div>');
     res.end($('html').html());
     return false;
+  });
+
+// this route responds to /nested/:name
+$.route('nested')
+  .on('route', (e, req, res) => {
+    const param = $.route('nested').data('name');
+    res.end(`I found a name! ${param}`);
   });
 
 // send requests to the router
