@@ -1,0 +1,30 @@
+{
+  "name": "yttrium-server",
+  "version": "0.0.1",
+  "description": "The jQuery web server framework",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YttriumJS/yttrium-server.git"
+  },
+  "keywords": [
+    "jquery",
+    "server"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/YttriumJS/yttrium-server/issues"
+  },
+  "homepage": "https://github.com/YttriumJS/yttrium-server#readme",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "jsdom": "^11.1.0"
+  }
+}
