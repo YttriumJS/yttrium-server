@@ -1,3 +1,4 @@
+const queryparse = require('url').parse;
 const jsdom = require('jsdom');
 const dom = new jsdom.JSDOM(`<!DOCTYPE html>`);
 const $ = require('jquery')(dom.window);
@@ -5,10 +6,15 @@ const $ = require('jquery')(dom.window);
 // attach the default index route to the RouterDOM
 $('html').append('<index>');
 
+// Holds query string params
+$('html').append('<querystring>');
+
 // the router needs access to a jQuery instance tied to the RouterDOM
 // it is meant to be used like $(server).on('request', router);
 const router = (server, req, res) => {
-  const route = req.url
+  const parsedURL = queryparse(req.url, true);
+
+  const route = parsedURL.pathname
     .replace(/\./g, '\\.') // paths referencing file names have to be escaped
     .split('/')
     .filter(r => r.length > 0);
@@ -19,7 +25,13 @@ const router = (server, req, res) => {
   }
   route.unshift('index');
 
+  // Get the route selector
   const routeTree = route.join(' > ');
+
+  // Inject querystring params into the dom
+  $.each(parsedURL.query, (key, val) => {
+    $('querystring').append(`<${key}>${val}</${key}>`);
+  });
 
   // full route was found
   if ($(routeTree).length) {
