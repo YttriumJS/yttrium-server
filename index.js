@@ -8,7 +8,7 @@ const Router = require('./router');
  * The jQuerate Function
  *
  * Patches the emitter and listen handler
- * to allow max jQuery gains
+ * to allow max jQuery gainz
  */
 const server = ((server, $) => {
   const oldEmit = server.emit;
