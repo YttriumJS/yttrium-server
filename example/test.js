@@ -22,6 +22,20 @@ $.route('get')
     return res.end(`Get params: poop is ${poopParam}`);
   });
 
+// http://localhost:8000/post
+// Body: 'cabbage'
+$.route('post')
+  .on('route', (e, req, res) => {
+    // What is life?
+    e.stopPropagation();
+
+    // Parse the body
+    $.body(req)
+    .then((body) => {
+      return res.end(`Post body: ${body}`);
+    });
+  });
+
 // add handler to test route
 $.route('test')
   .on('route', (e, req, res) => {
