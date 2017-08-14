@@ -4,7 +4,7 @@ module.exports = ($) => {
     .append('<get-example>')
     .append('<post-example data-method="post">')
     .append('<html-example>')
-    .append('<dynamic-example data-dynamic="name">');
+    .append('<param-example data-dynamic="name">');
 
   // add handler to index route
   $.route('index')
@@ -16,6 +16,7 @@ module.exports = ($) => {
       return res.end('Index route!');
     });
 
+  // add handler for get example
   // http://localhost:8000/get-example?test=shoot
   $.route('get-example')
     .on('route', (e, req, res) => {
@@ -27,8 +28,7 @@ module.exports = ($) => {
       return res.end(`Get params: test is ${testParam}`);
     });
 
-  // http://localhost:8000/post-example
-  // Body: 'cabbage'
+  // add handler for post example
   // this example can only be POSTed to -- it won't respond to other methods
   $.route('post-example')
     .on('route', (e, req, res) => {
@@ -44,7 +44,7 @@ module.exports = ($) => {
         });
     });
 
-  // add handler to test route
+  // add handler to html example route
   $.route('html-example')
     .on('route', (e, req, res) => {
       e.stopPropagation();
@@ -53,13 +53,13 @@ module.exports = ($) => {
       return res.end($('html').html());
     });
 
-  // this route responds to /nested/:name
-  $.route('dynamic-example')
+  // this route responds to /param-example/:name
+  $.route('param-example')
     .on('route', (e, req, res) => {
       e.stopPropagation();
-      const param = $.route('dynamic-example').data('name');
+      const param = $.route('param-example').data('name');
       if (!param) {
-        return res.end('Navigate to /dynamic-example/anything to see dynamic routes in action')
+        return res.end('Navigate to /param-example/anything to see dynamic routes in action')
       }
       return res.end(`I found a name! ${param}`);
     });
