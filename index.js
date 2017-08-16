@@ -20,16 +20,21 @@ const server = ((server, $) => {
   };
 
   $.listen = (server, ...args) => server.listen.apply(server, args);
-  $.route = Router.routes;
-  $.body = body;
 
   return server;
 })(http.createServer(), $);
 
-const router = Router.router;
 
-module.exports = {
-  $,
-  server,
-  router
+module.exports = (options) => {
+  const r = Router(options);
+  const router = r.router;
+
+  $.route = r.routes;
+  $.body = body;
+
+  return {
+    $,
+    server,
+    router
+  };
 };

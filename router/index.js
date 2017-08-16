@@ -3,6 +3,8 @@ const jsdom = require('jsdom');
 const dom = new jsdom.JSDOM(`<!DOCTYPE html>`);
 const $ = require('jquery')(dom.window);
 
+let notFound; // the 404 page name variable
+
 // attach the default index route to the RouterDOM
 $('html').append('<index>');
 
@@ -19,10 +21,10 @@ $('html').append('<querystring>');
 
 const send404 = (req, res) => {
   // trigger a custom not-found route if there is one
-  if ($('not-found').length) {
-    $('not-found').trigger('route', [req, res]);
+  if ($(notFound).length) {
+    $(notFound).trigger('route', [req, res]);
   } else {
-  // otherwise, just close out with a 404
+    // otherwise, just close out with a 404
     res.writeHead(404, 'Not Found');
     res.end();
   }
@@ -86,7 +88,14 @@ const router = (server, req, res) => {
   }
 };
 
-module.exports = {
-  routes: $,
-  router
+module.exports = (options) => {
+  notFound = options && options.notFound || 'not-found';
+
+  // graciously add the 404 route so all they have to worry about is the handler
+  $('index').append(`<${notFound}>`);
+
+  return {
+    routes: $,
+    router
+  };
 };

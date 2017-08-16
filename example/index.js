@@ -1,7 +1,7 @@
 const yt = require('../index');
 const routes = require('./routes');
 
-const { $, server, router } = yt;
+const { $, server, router } = yt({ notFound: 'oh-noes' });
 
 // import routes
 routes($);
