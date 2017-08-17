@@ -63,4 +63,12 @@ module.exports = ($) => {
       }
       return res.end(`I found a name! ${param}`);
     });
+
+  // this is a handler for the 404 name specified in options
+  // alternatively we could have handled the default 'not-found' route
+  $.route('oh-noes')
+    .on('route', (e, req, res) => {
+      e.stopPropagation();
+      res.end('My custom 404 page!');
+    });
 };

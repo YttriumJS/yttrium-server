@@ -15,7 +15,7 @@ The most basic Yttrium server:
 ```javscript
 const yt = require('../index');
 
-const { $, server } = yt;
+const { $, server } = yt();
 
 $(server).on('request', (server, req, res) => {
     res.end('Hello World');
@@ -101,7 +101,7 @@ If you're using the Yttrium router, you can pass all requests to it like this:
 ```javascript
 const yt = require('../index');
  
-const { $, server, router } = yt;
+const { $, server, router } = yt();
  
 // ... routes ...
  
@@ -126,10 +126,21 @@ No return value is necessary because the route functions are directly manipulati
 const yt = require('../index');
 const routes = require('./routes');
 
-const { $, server, router } = yt;
+const { $, server, router } = yt();
 
 // import routes
 routes($);
 
 // ... handle requests and start server
 ```
+
+### Options
+You can pass in an options object upon initialization:
+
+```javascript
+const { $, server, router } = yt({ notFound: 'oh-noes' });
+```
+
+Option | Purpose
+-------| -------
+`notFound` (String) | Specify the name of the 404 route (the default is `not-found`)
