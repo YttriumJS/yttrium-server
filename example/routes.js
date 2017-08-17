@@ -21,11 +21,11 @@ module.exports = ($) => {
   $.route('get-example')
     .on('route', (e, req, res) => {
       e.stopPropagation();
-      const testParam = $.route('querystring').find('test').text();
-      if (!testParam) {
+      const query = $.route('get-example').data('query');
+      if (!Object.keys(query).length) {
         return res.end('Add a query string parameter of test to this example like /get-example?test=happiness');
       }
-      return res.end(`Get params: test is ${testParam}`);
+      return res.end(`Get query string params: ${JSON.stringify(query)}`);
     });
 
   // add handler for post example
