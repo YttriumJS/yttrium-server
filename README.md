@@ -96,6 +96,18 @@ $.route('param-example')
     });
 ```   
 
+Query string parameters are automatically parsed and placed into an object in the data-query attribute of the route element.
+Accessing the query object looks like this:
+
+```javascript
+$.route('query-me') // localhost/query-me
+.on('route', (e, req, res) => {
+  e.stopPropagation();
+  const query = $.route('query-me').data('query');
+  return res.end(`Get query string params: ${JSON.stringify(query)}`);
+});
+```
+
 If you're using the Yttrium router, you can pass all requests to it like this:
 
 ```javascript

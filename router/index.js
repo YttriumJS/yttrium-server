@@ -8,15 +8,13 @@ let notFound; // the 404 page name variable
 // attach the default index route to the RouterDOM
 $('html').append('<index>');
 
-// Holds query string params
-$('html').append('<querystring>');
-
 /**
  *
  * Helper Functions
  *  send404 -- triggers the not-found route
  *  checkMethod -- checks to see if method was specified in route
  *    and if so, that the client request method matches the spec
+ *  routeTo -- handles properly triggering a route
  */
 
 const send404 = (req, res) => {
@@ -40,11 +38,22 @@ const checkMethod = (route, req) => {
   return true;
 };
 
+const routeTo = ({ to, req, res, query }) => {
+  // checks method and adds query params
+  if (checkMethod(to, req)) {
+    $(to)
+      .data('query', query)
+      .trigger('route', [req, res]);
+  } else {
+    send404(req, res);
+  }
+};
+
 // the router needs access to a jQuery instance tied to the RouterDOM
 // it is meant to be used like $(server).on('request', router);
 const router = (server, req, res) => {
   const parsedURL = queryparse(req.url, true);
-  const method = req.method;
+  const query = parsedURL.query;
 
   const route = parsedURL.pathname
     .replace(/\./g, '\\.') // paths referencing file names have to be escaped
@@ -53,35 +62,23 @@ const router = (server, req, res) => {
 
   // handle default route (index)
   if (!route.length) {
-    return $('index').trigger('route', [req, res]);
+    return routeTo({ to: 'index', req, res, query });
   }
   route.unshift('index');
 
   // Get the route selector
   const routeTree = route.join(' > ');
 
-  // Inject querystring params into the dom
-  $.each(parsedURL.query, (key, val) => {
-    $('querystring').append(`<${key}>${val}</${key}>`);
-  });
-
   // full route was found
   if ($(routeTree).length) {
-    // check if method was specified
-    if (checkMethod(routeTree, req)) {
-      $(routeTree).trigger('route', [req, res]);
-    } else {
-      send404(req, res);
-    }
+    routeTo({ to: routeTree, req, res, query });
+  }
   // possibly a dynamic route
-  } else if ($(route[route.length - 2]).length && $(route[route.length - 2]).data('dynamic')) {
-    if (checkMethod($(route[route.length - 2]))) {
-      $(route[route.length - 2])
-        .data($(route[route.length - 2]).data('dynamic'), route[route.length - 1]);
-      $(route[route.length - 2]).trigger('route', [req, res]);
-    } else {
-      send404(req, res);
-    }
+  else if ($(route[route.length - 2]).length && $(route[route.length - 2]).data('dynamic')) {
+    $(route[route.length - 2])
+      .data($(route[route.length - 2])
+        .data('dynamic'), route[route.length - 1]);
+    routeTo({ to: route[route.length - 2], req, res, query });
   // route not found and not a dynamic route
   } else {
     send404(req, res);
