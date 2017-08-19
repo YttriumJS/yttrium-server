@@ -1,5 +1,12 @@
-# yttrium-server
-The jQuery web server framework. Do not use in production.
+<div align="center">
+  <a href="https://github.com/YttriumJS/yttrium-server">
+    <img width="500" heigth="327" src="https://cldup.com/UItSrUsRMU.png">
+</a>
+<h2>jQuery web server framework.</h2> 
+
+:skull: (Do not use in production.) :skull:
+</div>
+
 
 ## Installation
 ```bash
