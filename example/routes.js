@@ -38,7 +38,7 @@ module.exports = ($) => {
       $.body(req)
         .then((body) => {
           if (!body) {
-            return res.end('Send a post body to this example')
+            return res.end('Send a post body to this example');
           }
           return res.end(`Post body: ${body}`);
         });
@@ -59,7 +59,7 @@ module.exports = ($) => {
       e.stopPropagation();
       const param = $.route('param-example').data('name');
       if (!param) {
-        return res.end('Navigate to /param-example/anything to see dynamic routes in action')
+        return res.end('Navigate to /param-example/anything to see dynamic routes in action');
       }
       return res.end(`I found a name! ${param}`);
     });
