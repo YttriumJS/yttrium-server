@@ -19,7 +19,7 @@ Have a look at the [example](https://github.com/YttriumJS/yttrium-server/blob/ma
 ### Getting Started
 
 The most basic Yttrium server: 
-```javscript
+```javascript
 const yt = require('yttrium-server');
 
 // instantiating the Yttrium jQuery instance
