@@ -26,7 +26,7 @@ const server = ((server, $) => {
 
 
 module.exports = (options) => {
-  const r = Router(options);
+  const r = new Router(options);
   const router = r.router;
 
   $.route = r.routes;
