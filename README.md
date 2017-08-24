@@ -20,15 +20,18 @@ Have a look at the [example](https://github.com/YttriumJS/yttrium-server/blob/ma
 
 The most basic Yttrium server: 
 ```javscript
-const yt = require('../index');
+const yt = require('yttrium-server');
 
+// instantiating the Yttrium jQuery instance
+// and the HTTP server object
 const { $, server } = yt();
 
+// on any HTTP request, send Hello World
 $(server).on('request', (server, req, res) => {
     res.end('Hello World');
 });
 
-// start up server
+// start up server listener
 $.listen(server, 8000);
 
 $(server).on('listening', (e) => {
