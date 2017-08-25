@@ -8,7 +8,8 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "mocha"
+    "test": "mocha",
+    "coveralls": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -26,10 +27,12 @@
   "homepage": "https://github.com/YttriumJS/yttrium-server#readme",
   "dependencies": {
     "jquery": "^3.2.1",
-    "jsdom": "^11.1.0"
+    "jsdom": "^11.1.0",
+    "nyc": "^11.1.0"
   },
   "devDependencies": {
     "chai": "^4.1.1",
+    "coveralls": "^2.13.1",
     "eslint": "^4.5.0",
     "eslint-config-airbnb-base": "^11.3.2",
     "eslint-plugin-import": "^2.7.0",

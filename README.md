@@ -3,6 +3,8 @@
     <img width="400" heigth="327" src="https://cldup.com/UItSrUsRMU.png">
 </a>
 <h2>jQuery web server framework</h2> 
+<a href='https://coveralls.io/github/YttriumJS/yttrium-server?branch=feature%2Fcoverage-and-ci'><img src='https://coveralls.io/repos/github/YttriumJS/yttrium-server/badge.svg?branch=master' alt='Coverage Status' /></a>
+<a href='https://travis-ci.org/YttriumJS/yttrium-server'><img src='https://travis-ci.org/YttriumJS/yttrium-server.svg?branch=master' alt='Build Status' /></a>
 
 :skull: (Do not use in production.) :skull:
 </div>
