@@ -1,8 +1,6 @@
 const queryparse = require('url').parse;
 const jsdom = require('jsdom');
-
-const dom = new jsdom.JSDOM('<!DOCTYPE html>');
-const $ = require('jquery')(dom.window);
+const jQuery = require('jquery');
 
 /**
  * Yttrium Router
@@ -10,16 +8,21 @@ const $ = require('jquery')(dom.window);
  */
 module.exports = class Router {
   constructor(options) {
-    this.notFound = (options && options.notFound) || 'not-found';
-    this.routes = $;
+    this.dom = new jsdom.JSDOM('<!DOCTYPE html>');
+    this.$ = jQuery(this.dom.window);
+    this.notFound = (options && options.notFound);
 
+    this.$ = this.$.bind(this);
     this.router = this.router.bind(this);
     this.routeTo = this.routeTo.bind(this);
     this.send404 = this.send404.bind(this);
+    this.checkMethod = this.checkMethod.bind(this);
 
     // attach the default index route to the RouterDOM
-    $('html').append('<index>');
-    $('index').append(`<${this.notFound}>`);
+    this.$('html').append('<index>');
+
+    // if a custom 404 route was specified, attach it to the DOM at no charge
+    if (this.notFound) this.$('index').append(`<${this.notFound}>`);
   }
 
   /**
@@ -32,34 +35,40 @@ module.exports = class Router {
    * @returns {*}
    */
   router(server, req, res) {
-    const parsedURL = queryparse(req.url, true);
-    const query = parsedURL.query;
+    if (req && res) {
+      const parsedURL = queryparse(req.url, true);
+      const query = parsedURL.query;
 
-    const route = parsedURL.pathname
-      .replace(/\./g, '\\.') // paths referencing file names have to be escaped
-      .split('/')
-      .filter(r => r.length > 0);
+      const route = parsedURL.pathname
+        .replace(/\./g, '\\.') // paths referencing file names have to be escaped
+        .split('/')
+        .filter(r => r.length > 0);
 
-    // handle default route (index)
-    if (!route.length) {
-      return this.routeTo({ to: 'index', req, res, query });
-    }
-    route.unshift('index');
+      // handle default route (index)
+      if (!route.length) {
+        return this.routeTo({ to: 'index', req, res, query });
+      }
+      route.unshift('index');
 
-    // Get the route selector
-    const routeTree = route.join(' > ');
+      // Get the route selector
+      const routeTree = route.join(' > ');
 
-    if ($(routeTree).length) {
-      // full route was found
-      this.routeTo({ to: routeTree, req, res, query });
-    } else if ($(route[route.length - 2]).length && $(route[route.length - 2]).data('dynamic')) {
-      // possibly a dynamic route
-      $(route[route.length - 2])
-        .data($(route[route.length - 2])
-          .data('dynamic'), route[route.length - 1]);
-      this.routeTo({ to: route[route.length - 2], req, res, query });
+      if (this.$(routeTree).length) {
+        // full route was found
+        return this.routeTo({ to: routeTree, req, res, query });
+      }
+
+      const possibleParam = route.pop();
+      const paramRouteTree = route.join(' > ');
+
+      if (this.$(paramRouteTree).length && this.$(paramRouteTree).data('dynamic')) {
+        // a route with a dynamic parameter
+        // set the data-[something] with what the route had specified in data-dynamic='something'
+        this.$(paramRouteTree).data(this.$(paramRouteTree).data('dynamic'), possibleParam);
+        return this.routeTo({ to: paramRouteTree, req, res, query });
+      }
+
       // route not found and not a dynamic route
-    } else {
       this.send404(req, res);
     }
     return true;
@@ -74,8 +83,8 @@ module.exports = class Router {
    */
   routeTo({ to, req, res, query }) {
     // checks method and adds query params
-    if (Router.checkMethod(to, req)) {
-      $(to)
+    if (this.checkMethod(to, req)) {
+      this.$(to)
         .data('query', query)
         .trigger('route', [req, res]);
     } else {
@@ -89,12 +98,12 @@ module.exports = class Router {
    * @param req
    * @returns {boolean}
    */
-  static checkMethod(route, req) {
+  checkMethod(route, req) {
     // returns true if method was unspecified
     // returns false if method was specified but didn't match request
     // returns true if method specified and matched by request
-    if ($(route).data('method')) {
-      return $(route).data('method').toUpperCase() === req.method;
+    if (this.$(route).data('method')) {
+      return this.$(route).data('method').toUpperCase() === req.method;
     }
     return true;
   }
@@ -106,8 +115,8 @@ module.exports = class Router {
    */
   send404(req, res) {
     // trigger a custom not-found route if there is one
-    if ($(this.notFound).length) {
-      $(this.notFound).trigger('route', [req, res]);
+    if (this.notFound && this.$(`index > ${this.notFound}`)) {
+      this.$(this.$(`index > ${this.notFound}`)).trigger('route', [req, res]);
     } else {
       // otherwise, just close out with a 404
       res.writeHead(404, 'Not Found');

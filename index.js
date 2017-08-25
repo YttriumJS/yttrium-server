@@ -24,7 +24,7 @@ const server = ((httpServer, jQuery) => {
 
   jq.listen = (s, ...args) => s.listen(...args);
 
-  return server;
+  return ser;
 })(http.createServer(), $);
 
 
@@ -32,7 +32,7 @@ module.exports = (options) => {
   const r = new Router(options);
   const router = r.router;
 
-  $.route = r.routes;
+  $.route = r.$;
   $.body = body;
 
   return {
