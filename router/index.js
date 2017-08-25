@@ -1,6 +1,7 @@
 const queryparse = require('url').parse;
 const jsdom = require('jsdom');
-const dom = new jsdom.JSDOM(`<!DOCTYPE html>`);
+
+const dom = new jsdom.JSDOM('<!DOCTYPE html>');
 const $ = require('jquery')(dom.window);
 
 /**
@@ -9,7 +10,7 @@ const $ = require('jquery')(dom.window);
  */
 module.exports = class Router {
   constructor(options) {
-    this.notFound = options && options.notFound || 'not-found';
+    this.notFound = (options && options.notFound) || 'not-found';
     this.routes = $;
 
     this.router = this.router.bind(this);
@@ -48,12 +49,11 @@ module.exports = class Router {
     // Get the route selector
     const routeTree = route.join(' > ');
 
-    // full route was found
     if ($(routeTree).length) {
+      // full route was found
       this.routeTo({ to: routeTree, req, res, query });
-    }
-    // possibly a dynamic route
-    else if ($(route[route.length - 2]).length && $(route[route.length - 2]).data('dynamic')) {
+    } else if ($(route[route.length - 2]).length && $(route[route.length - 2]).data('dynamic')) {
+      // possibly a dynamic route
       $(route[route.length - 2])
         .data($(route[route.length - 2])
           .data('dynamic'), route[route.length - 1]);
@@ -62,7 +62,8 @@ module.exports = class Router {
     } else {
       this.send404(req, res);
     }
-  };
+    return true;
+  }
 
   /**
    * Adds any query params to the query data object and triggers the route
@@ -80,7 +81,7 @@ module.exports = class Router {
     } else {
       this.send404(req, res);
     }
-  };
+  }
 
   /**
    * Checks to see if method was specified on route and if so, that the request method matches
@@ -96,7 +97,7 @@ module.exports = class Router {
       return $(route).data('method').toUpperCase() === req.method;
     }
     return true;
-  };
+  }
 
   /**
    * Triggers route function for the not-found route
@@ -112,5 +113,5 @@ module.exports = class Router {
       res.writeHead(404, 'Not Found');
       res.end();
     }
-  };
+  }
 };

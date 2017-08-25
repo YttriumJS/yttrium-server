@@ -1,6 +1,7 @@
 const http = require('http');
 const jsdom = require('jsdom');
-const dom = new jsdom.JSDOM(`<!DOCTYPE html>`);
+
+const dom = new jsdom.JSDOM('<!DOCTYPE html>');
 const $ = require('jquery')(dom.window);
 const Router = require('./router');
 const body = require('./body');
@@ -11,15 +12,17 @@ const body = require('./body');
  * Patches the emitter and listen handler
  * to allow max jQuery gainz
  */
-const server = ((server, $) => {
-  const oldEmit = server.emit;
+const server = ((httpServer, jQuery) => {
+  const ser = httpServer;
+  const jq = jQuery;
+  const oldEmit = ser.emit;
 
-  server.emit = function(type, ...data) {
-    $(server).trigger(type, data);
-    oldEmit.apply(server, [type, ...data]);
+  ser.emit = function emit(type, ...data) {
+    jq(ser).trigger(type, data);
+    oldEmit.apply(ser, [type, ...data]);
   };
 
-  $.listen = (server, ...args) => server.listen.apply(server, args);
+  jq.listen = (s, ...args) => s.listen(...args);
 
   return server;
 })(http.createServer(), $);
@@ -35,6 +38,6 @@ module.exports = (options) => {
   return {
     $,
     server,
-    router
+    router,
   };
 };
