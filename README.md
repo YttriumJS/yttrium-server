@@ -2,7 +2,8 @@
   <a href="https://github.com/YttriumJS/yttrium-server">
     <img width="400" heigth="327" src="https://cldup.com/UItSrUsRMU.png">
 </a>
-<h2>jQuery web server framework</h2> 
+<h2>jQuery web server framework</h2>
+<a href="https://npmjs.org/package/yttrium-server"><img src="https://badge.fury.io/js/yttrium-server.svg" alt="npm version"></a> 
 <a href='https://coveralls.io/github/YttriumJS/yttrium-server?branch=master'><img src='https://coveralls.io/repos/github/YttriumJS/yttrium-server/badge.svg?branch=master' alt='Coverage Status' /></a>
 <a href='https://travis-ci.org/YttriumJS/yttrium-server'><img src='https://travis-ci.org/YttriumJS/yttrium-server.svg?branch=master' alt='Build Status' /></a>
 
