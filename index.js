@@ -1,43 +1,43 @@
 const http = require('http');
 const jsdom = require('jsdom');
-
-const dom = new jsdom.JSDOM('<!DOCTYPE html>');
-const $ = require('jquery')(dom.window);
+const jQuery = require('jquery');
 const Router = require('./router');
 const body = require('./body');
 
 /**
- * The jQuerate Function
+ * The jQuerate Class
  *
  * Patches the emitter and listen handler
  * to allow max jQuery gainz
  */
-const server = ((httpServer, jQuery) => {
-  const ser = httpServer;
-  const jq = jQuery;
-  const oldEmit = ser.emit;
+class Yttrium {
+  constructor(options) {
+    this.dom = new jsdom.JSDOM('<!DOCTYPE html>');
+    this.$ = jQuery(this.dom.window);
 
-  ser.emit = function emit(type, ...data) {
-    jq(ser).trigger(type, data);
-    oldEmit.apply(ser, [type, ...data]);
-  };
+    const r = new Router(options);
+    const router = r.router;
 
-  jq.listen = (s, ...args) => s.listen(...args);
+    this.server = ((httpServer, jQueryInstance) => {
+      const ser = httpServer;
+      const jq = jQueryInstance;
+      const oldEmit = ser.emit;
 
-  return ser;
-})(http.createServer(), $);
+      ser.emit = function emit(type, ...data) {
+        jq(ser).trigger(type, data);
+        oldEmit.apply(ser, [type, ...data]);
+      };
+
+      jq.listen = (s, ...args) => s.listen(...args);
+
+      return ser;
+    })(http.createServer(), this.$);
 
 
-module.exports = (options) => {
-  const r = new Router(options);
-  const router = r.router;
+    this.$.route = r.$;
+    this.$.body = body;
+    this.router = router;
+  }
+}
 
-  $.route = r.$;
-  $.body = body;
-
-  return {
-    $,
-    server,
-    router,
-  };
-};
+module.exports = options => new Yttrium(options);
