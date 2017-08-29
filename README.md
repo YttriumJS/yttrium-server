@@ -23,11 +23,11 @@ Have a look at the [example](https://github.com/YttriumJS/yttrium-server/blob/ma
 
 The most basic Yttrium server: 
 ```javascript
-const yt = require('yttrium-server');
+const Y = require('yttrium-server');
 
 // instantiating the Yttrium jQuery instance
 // and the HTTP server object
-const { $, server } = yt();
+const { $, server } = Y();
 
 // on any HTTP request, send Hello World
 $(server).on('request', (server, req, res) => {
@@ -126,7 +126,7 @@ If you're using the Yttrium router, you can pass all requests to it like this:
 ```javascript
 const yt = require('../index');
  
-const { $, server, router } = yt();
+const { $, server, router } = Y();
  
 // ... routes ...
  
@@ -151,7 +151,7 @@ No return value is necessary because the route functions are directly manipulati
 const yt = require('../index');
 const routes = require('./routes');
 
-const { $, server, router } = yt();
+const { $, server, router } = Y();
 
 // import routes
 routes($);
@@ -163,7 +163,7 @@ routes($);
 You can pass in an options object upon initialization:
 
 ```javascript
-const { $, server, router } = yt({ notFound: 'oh-noes' });
+const { $, server, router } = Y({ notFound: 'oh-noes' });
 ```
 
 Option | Purpose
