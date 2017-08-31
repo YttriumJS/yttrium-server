@@ -3,7 +3,7 @@
 const Readable = require('stream').Readable;
 const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
-const body = require('../body');
+const body = require('../src/body');
 
 const expect = chai.expect;
 chai.use(chaiAsPromised);

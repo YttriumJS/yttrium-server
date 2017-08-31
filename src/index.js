@@ -1,8 +1,8 @@
 const http = require('http');
 const jsdom = require('jsdom');
 const jQuery = require('jquery');
-const Router = require('./router');
-const body = require('./body');
+const Router = require('./router/index');
+const body = require('./body/index');
 
 /**
  * The jQuerate Class

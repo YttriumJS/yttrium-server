@@ -1,4 +1,4 @@
-const Y = require('../index');
+const Y = require('../lib/index');
 const routes = require('./routes');
 
 const { $, server, router } = Y({ notFound: 'oh-noes' });
