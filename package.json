@@ -48,6 +48,7 @@
   "nyc": {
     "exclude": [
       "example",
+      "lib",
       "**/*.spec.js"
     ]
   }
