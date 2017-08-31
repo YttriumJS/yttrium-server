@@ -14,25 +14,22 @@ class Yttrium {
   constructor(options) {
     this.dom = new jsdom.JSDOM('<!DOCTYPE html>');
     this.$ = jQuery(this.dom.window);
+    this.$ = this.$.bind(this);
 
     const r = new Router(options);
     const router = r.router;
 
-    this.server = ((httpServer, jQueryInstance) => {
-      const ser = httpServer;
-      const jq = jQueryInstance;
-      const oldEmit = ser.emit;
+    this.server = http.createServer();
+    const oldEmit = this.server.emit;
 
-      ser.emit = function emit(type, ...data) {
-        jq(ser).trigger(type, data);
-        oldEmit.apply(ser, [type, ...data]);
-      };
+    const emit = (type, ...data) => {
+      this.$(this.server).trigger(type, data);
+      oldEmit.apply(this.server, [type, ...data]);
+    };
 
-      jq.listen = (s, ...args) => s.listen(...args);
+    this.server.emit = emit.bind(this);
 
-      return ser;
-    })(http.createServer(), this.$);
-
+    this.$.listen = (s, ...args) => s.listen(...args);
 
     this.$.route = r.$;
     this.$.body = body;
