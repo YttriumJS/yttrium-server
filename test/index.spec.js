@@ -1,7 +1,7 @@
 /* global describe, it */
 const chai = require('chai');
 const http = require('http');
-const Y = require('../');
+const Y = require('../src');
 
 const expect = chai.expect;
 
