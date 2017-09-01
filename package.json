@@ -18,8 +18,11 @@
     "url": "git+https://github.com/YttriumJS/yttrium-server.git"
   },
   "keywords": [
+    "framework",
     "jquery",
-    "server"
+    "backend",
+    "server",
+    "yttrium"
   ],
   "author": "YttriumJS",
   "license": "MIT",
