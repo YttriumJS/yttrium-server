@@ -2,7 +2,6 @@ module.exports = ($) => {
   // add routes onto the root (e.g. localhost/get-example)
   $.route('index')
     .append('<get-example>')
-    .append('<post-example data-method="post">')
     .append('<html-example>')
     .append('<param-example data-dynamic="name">');
 
@@ -26,22 +25,6 @@ module.exports = ($) => {
         return res.end('Add a query string parameter of test to this example like /get-example?test=happiness');
       }
       return res.end(`Get query string params: ${JSON.stringify(query)}`);
-    });
-
-  // add handler for post example
-  // this example can only be POSTed to -- it won't respond to other methods
-  $.route('post-example')
-    .on('route', (e, req, res) => {
-      e.stopPropagation();
-
-      // Parse the body
-      $.body(req)
-        .then((body) => {
-          if (!body) {
-            return res.end('Send a post body to this example');
-          }
-          return res.end(`Post body: ${body}`);
-        });
     });
 
   // add handler to html example route
