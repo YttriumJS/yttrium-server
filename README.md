@@ -35,7 +35,7 @@ $(server).on('request', (server, req, res) => {
 });
 
 // start up server listener
-$.listen(server, 8000);
+$(server).listen(8000);
 
 $(server).on('listening', (e) => {
   console.log('Server is listening on port:', e.target.address().port);
