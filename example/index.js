@@ -1,4 +1,4 @@
-const Y = require('../lib/index');
+const Y = require('../src/index');
 const routes = require('./routes');
 
 const { $, server, router } = Y({ notFound: 'oh-noes' });
@@ -10,7 +10,9 @@ routes($);
 $(server).on('request', router);
 
 // start up server
-$.listen(server, 8000);
+// $.listen(server, 8000);
+$(server).listen(8000);
+
 $(server).on('listening', (e) => {
   console.log('Server is listening on port:', e.target.address().port);
 });

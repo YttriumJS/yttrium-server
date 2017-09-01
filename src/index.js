@@ -2,7 +2,6 @@ const http = require('http');
 const jsdom = require('jsdom');
 const jQuery = require('jquery');
 const Router = require('./router/index');
-const body = require('./body/index');
 
 /**
  * The jQuerate Class
@@ -12,28 +11,41 @@ const body = require('./body/index');
  */
 class Yttrium {
   constructor(options) {
+    const self = this;
     this.dom = new jsdom.JSDOM('<!DOCTYPE html>');
     this.$ = jQuery(this.dom.window);
-    this.$ = this.$.bind(this);
 
-    const r = new Router(options);
-    const router = r.router;
+    // add plugin installer and server listener
+    this.$.fn.extend({
+      use() {
+        const plugin = this[0];
+        const pluginName = plugin.name;
+        const pluginFunc = plugin.func;
+        self.$.fn.extend({
+          [pluginName]: pluginFunc,
+        });
+        return this;
+      },
+      listen(...args) {
+        const server = this[0];
+        server.listen(...args);
+        return this;
+      },
+    });
 
+    // jQuerate an HTTP Server
     this.server = http.createServer();
     const oldEmit = this.server.emit;
-
     const emit = (type, ...data) => {
       this.$(this.server).trigger(type, data);
       oldEmit.apply(this.server, [type, ...data]);
     };
-
     this.server.emit = emit.bind(this);
 
-    this.$.listen = (s, ...args) => s.listen(...args);
-
+    // set up Router and bindings
+    const r = new Router(options);
+    this.router = r.router;
     this.$.route = r.$;
-    this.$.body = body;
-    this.router = router;
   }
 }
 

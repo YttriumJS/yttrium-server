@@ -60,7 +60,6 @@ An example:
 // Adding endpoints
 $.route('index') // e.g. localhost/
     .append('<hello>') // localhost/hello
-    .append('<post-example data-method="post">') // localhost/post-example (only responds to POST requests)
     .append('<param-example data-dynamic="name">'); // localhost/param-example/harry etc
     
 // add handler to index route
@@ -81,21 +80,6 @@ $.route('hello')
       $('body').html('<h1>This example uses HTML... hello world!</h1>');
       return res.end($('html').html());
     });
- 
-$.route('post-example')
-    .on('route', (e, req, res) => {
-      e.stopPropagation();
-       
-      // Parse the body
-      $.body(req)
-        .then((body) => {
-          if (!body) {
-            return res.end('Send a post body to this example')
-          }
-          return res.end(`Post body: ${body}`);
-        });
-    });
- 
  
 // this route responds to /param-example/:name
 $.route('param-example')
@@ -159,6 +143,9 @@ routes($);
 // ... handle requests and start server
 ```
 
+#### Body Parsing
+See the [Yttrium body parser](https://github.com/YttriumJS/yttbody) package for examples of parsing the request body.
+
 ### Options
 You can pass in an options object upon initialization:
 
@@ -169,3 +156,6 @@ const { $, server, router } = Y({ notFound: 'oh-noes' });
 Option | Purpose
 -------| -------
 `notFound` (String) | Specify the name of the 404 route (the default is `not-found`)
+
+## License
+[MIT](https://github.com/YttriumJS/yttrium-server/blob/master/LICENSE)

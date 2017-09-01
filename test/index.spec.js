@@ -13,11 +13,14 @@ describe('Yttrium', () => {
       expect(yt).to.have.ownProperty('$');
       expect(yt).to.have.ownProperty('router');
     });
-    it('should create properties for the Router, body parser, and listener', () => {
+    it('should create property for the Router DOM', () => {
       const yt = Y();
       expect(yt.$).to.have.ownProperty('route');
-      expect(yt.$).to.have.ownProperty('listen');
-      expect(yt.$).to.have.ownProperty('body');
+    });
+    it('should extend the jQuery instance with use and listen', () => {
+      const yt = Y();
+      expect(yt.$.prototype).to.have.ownProperty('use');
+      expect(yt.$.prototype).to.have.ownProperty('listen');
     });
     describe('jQuerated server', () => {
       it('should create a jQuerated server', () => {
@@ -36,17 +39,32 @@ describe('Yttrium', () => {
 
         yt.server.emit('test', 'hello');
       });
-    });
-    it('should have a jQuery listen function', (done) => {
-      const yt = Y();
-      const testServer = {
-        listen: (test) => {
-          expect(test).to.equal('hello');
-          done();
-        },
-      };
+      it('should have a jQuery listen function', (done) => {
+        const yt = Y();
+        const testServer = {
+          listen: (test) => {
+            expect(test).to.equal('hello');
+            done();
+          },
+        };
 
-      yt.$.listen(testServer, 'hello');
+        yt.$(testServer).listen('hello');
+      });
+      it('should have a jQuery use function', (done) => {
+        const yt = Y();
+        const fakePlugin = {
+          name: 'fakePlugin',
+          func: () => {
+            done();
+          },
+        };
+
+        const fakeTarget = {};
+
+        yt.$(fakePlugin).use();
+        expect(yt.$.prototype).to.have.ownProperty('fakePlugin');
+        yt.$(fakeTarget).fakePlugin();
+      });
     });
   });
 });
