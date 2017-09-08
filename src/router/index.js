@@ -1,5 +1,5 @@
 const queryparse = require('url').parse;
-const jsdom = require('jsdom');
+const domino = require('domino');
 const jQuery = require('jquery');
 
 /**
@@ -8,8 +8,8 @@ const jQuery = require('jquery');
  */
 module.exports = class Router {
   constructor(options) {
-    this.dom = new jsdom.JSDOM('<!DOCTYPE html>');
-    this.$ = jQuery(this.dom.window);
+    this.dom = domino.createWindow('<!DOCTYPE html>'); // new jsdom.JSDOM('<!DOCTYPE html>');
+    this.$ = jQuery(this.dom);
     this.notFound = (options && options.notFound);
 
     this.$ = this.$.bind(this);

@@ -1,5 +1,5 @@
 const http = require('http');
-const jsdom = require('jsdom');
+const domino = require('domino');
 const jQuery = require('jquery');
 const Router = require('./router/index');
 
@@ -12,8 +12,8 @@ const Router = require('./router/index');
 class Yttrium {
   constructor(options) {
     const self = this;
-    this.dom = new jsdom.JSDOM('<!DOCTYPE html>');
-    this.$ = jQuery(this.dom.window);
+    this.dom = domino.createWindow('<!DOCTYPE html>'); // new jsdom.JSDOM('<!DOCTYPE html>');
+    this.$ = jQuery(this.dom);
 
     // add plugin installer and server listener
     this.$.fn.extend({
