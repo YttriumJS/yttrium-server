@@ -32,7 +32,7 @@
   "homepage": "https://github.com/YttriumJS/yttrium-server#readme",
   "dependencies": {
     "jquery": "^3.2.1",
-    "jsdom": "^11.1.0"
+    "domino": "^1.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
