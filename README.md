@@ -7,7 +7,7 @@
 <a href='https://coveralls.io/github/YttriumJS/yttrium-server?branch=master'><img src='https://coveralls.io/repos/github/YttriumJS/yttrium-server/badge.svg?branch=master' alt='Coverage Status' /></a>
 <a href='https://travis-ci.org/YttriumJS/yttrium-server'><img src='https://travis-ci.org/YttriumJS/yttrium-server.svg?branch=master' alt='Build Status' /></a>
 
-:skull: (Do not use in production.) :skull:
+:skull: (Do not use in production. Maybe.) :skull:
 </div>
 
 
@@ -15,6 +15,16 @@
 ```bash
 npm install yttrium-server --save
 ```
+
+### Some Benchmarks
+Running `autocannon -c 100 -d 5 -p 10 http://localhost:8000` with a JSON response:
+
+Platform | req/sec
+---------|--------
+Koa      | 23,028
+Yttrium  | 21,259
+Express  | 13,370
+Hapi     | 3,371
 
 ## How to Use
 Have a look at the [example](https://github.com/YttriumJS/yttrium-server/blob/master/example/) to see how easy it is get a fully functional Yttrium server up. Below is a brief outline of some of the core functionality.
